@@ -1,5 +1,7 @@
 package ViewPrototypes;
 
+import Views.Prototype;
+
 import javax.swing.*;
 
 public class DetailViewPrototype extends JFrame implements Prototype {

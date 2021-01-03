@@ -1,23 +1,25 @@
 package Controllers;
 
-import ViewPrototypes.DetailViewPrototype;
-import ViewPrototypes.Prototype;
-import Views.DetailView;
+import Views.ViewsInterface;
 
-import javax.swing.*;
+public class DetailViewController extends ControllersAbstraction {
 
-public class DetailViewController implements ControllersInterface{
+    private ViewsInterface view;
 
-    public DetailViewController(){
+    public DetailViewController(ViewsInterface _viewInterface){
+        super(_viewInterface);
+        this.view = _viewInterface;
     }
 
     @Override
     public void initializeComponents() {
         System.out.println("Init componenents");
+        this.view.initializeComponents();
     }
 
     @Override
     public void setViewVisible() {
         System.out.println("Set view visible");
+        this.view.setViewVisible();
     }
 }

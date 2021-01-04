@@ -79,4 +79,36 @@ public class MySQL implements API {
         }
         return listOfRows;
     }
+
+    @Override
+    public void insert(String _table, String values) {
+        Statement sm = null;
+
+        try {
+            sm = this.connection.createStatement();
+            String[] columnNames = getListOfColumns(_table).toArray(new String[0]);
+                    /*
+                    INSERT INTO table_name (column1, column2, column3, ...)
+                    VALUES (value1, value2, value3, ...);
+                    */
+            StringBuilder table_columns = new StringBuilder();
+            for (int i = 0; i < columnNames.length; i++) {
+                table_columns.append(columnNames[i]);
+                if (i < columnNames.length - 1) table_columns.append(",");
+            }
+            String sql = "INSERT INTO " + _table + "(" + table_columns.toString() + ") " + "VALUES " + "(" + values + ")";
+            System.out.println(sql);
+            int n = sm.executeUpdate (sql);
+            if (n >= 0){
+                System.out.println("Success");
+            }else{
+                System.out.println("Error");
+            }
+            sm.close();
+            //this.connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

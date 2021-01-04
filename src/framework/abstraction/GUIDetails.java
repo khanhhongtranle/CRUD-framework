@@ -4,6 +4,8 @@ import framework.implementation.API;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class GUIDetails extends GUI implements GUIPrototype{
@@ -16,6 +18,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
     protected JButton deleteButton;
     protected JTable table;
     protected JScrollPane scrollPane;
+    protected String tableName;
 
     public GUIDetails(API _api) {
         super(_api);
@@ -32,12 +35,15 @@ public class GUIDetails extends GUI implements GUIPrototype{
     }
 
     public void initComponents(String _table){
+        this.tableName = _table;
+
         this.frame = new JFrame("Detail");
         this.panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         this.tableNameLabel = new JLabel(_table);
         this.createButton = new JButton("Create");
+        this.createButton.addActionListener(new handleCreate());
         this.updateButton = new JButton("Update");
         this.deleteButton = new JButton("Delete");
 
@@ -63,8 +69,18 @@ public class GUIDetails extends GUI implements GUIPrototype{
         return api.getListOfColumns(_table);
     }
 
-    @Override
+    //@Override
     protected ArrayList<Object[]> getListOfRows(String _table) {
         return api.getListOfRows(_table);
+    }
+
+    private class handleCreate implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            GUICreate guiCreate = new GUICreate(api);
+            guiCreate.connectToDatabase();
+            guiCreate.initComponents(tableName);
+        }
     }
 }

@@ -11,9 +11,10 @@ public class main {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 API api = APIFactory.create("MYSQL","localhost:3306","root","", "funretro");
+
                 GUIDetails guiDetails = new GUIDetails(api);
                 guiDetails.connectToDatabase();
-                guiDetails.initComponents();
+                guiDetails.initComponents("users");
             }
         });
     }

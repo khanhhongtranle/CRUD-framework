@@ -1,7 +1,6 @@
 package framework.implementation;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class MySQL implements API {
@@ -37,11 +36,47 @@ public class MySQL implements API {
 
     @Override
     public ArrayList<String> getListOfColumns(String _table) {
-        return null;
+        ArrayList<String> columnNames = new ArrayList<>();
+
+        try {
+            Statement stmt = this.connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from " + _table);
+            ResultSetMetaData rsMetaData = rs.getMetaData();
+            System.out.println("List of column names in the current table: ");
+            int count = rsMetaData.getColumnCount();
+            for (int i = 1; i <= count; i++) {
+                System.out.println(rsMetaData.getColumnName(i));
+                columnNames.add(rsMetaData.getColumnName(i));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return columnNames;
     }
 
     @Override
     public ArrayList<Object[]> getListOfRows(String _table) {
-        return null;
+        String query = "SELECT * FROM " + _table;
+        String[] columnNames = getListOfColumns(_table).toArray(new String[0]);
+
+        ArrayList<Object[]> listOfRows = new ArrayList<>();
+        Statement st;
+        ResultSet rs;
+
+        try {
+            st = this.connection.createStatement();
+            rs = st.executeQuery(query);
+            Object[] sth;
+            while(rs.next()) {
+                sth = new Object[columnNames.length];
+                for (int i = 0; i < columnNames.length; i++) {
+                    sth[i] = rs.getString(columnNames[i]);
+                }
+                listOfRows.add(sth);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return listOfRows;
     }
 }

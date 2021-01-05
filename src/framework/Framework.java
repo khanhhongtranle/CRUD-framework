@@ -10,7 +10,18 @@ import java.awt.*;
  * core
  */
 public class Framework implements IFramework {
+
+    private static final Framework INSTANCE = new Framework();
+
     private API api = null;
+
+    private Framework(){
+
+    }
+
+    public static Framework getInstance(){
+        return INSTANCE;
+    }
 
     @Override
     public void connect(String _type, String _url, String _user, String _password, String _database) {

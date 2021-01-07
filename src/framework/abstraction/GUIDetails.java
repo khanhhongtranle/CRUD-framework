@@ -3,6 +3,7 @@ package framework.abstraction;
 import framework.implementation.API;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
     protected JButton createButton;
     protected JButton updateButton;
     protected JButton deleteButton;
+    protected JButton resetButton;
     protected JTable table;
     protected JScrollPane scrollPane;
     protected String tableName;
@@ -45,8 +47,13 @@ public class GUIDetails extends GUI implements GUIPrototype{
         this.createButton.addActionListener(new handleCreate());
         this.updateButton = new JButton("Update");
         this.deleteButton = new JButton("Delete");
+        this.resetButton = new JButton("Reset");
+        this.resetButton.addActionListener(new handleReset());
 
-        String[] columnNames = getListOfColumnsName(_table).toArray(new String[0]);
+        ArrayList<String> columns = getListOfColumnsName(_table);
+//        columns.add("Update"); //column update button
+//        columns.add("Delete"); //column delete button
+        String[] columnNames = columns.toArray(new String[0]);
         Object[][] data = getListOfRows(_table).toArray(new Object[0][0]);
         this.table = new JTable(data, columnNames);
         this.scrollPane = new JScrollPane(table);
@@ -55,6 +62,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
         this.panel.add(createButton);
         this.panel.add(updateButton);
         this.panel.add(deleteButton);
+        this.panel.add(resetButton);
         this.panel.add(scrollPane);
 
         this.frame.setContentPane(panel);
@@ -80,6 +88,18 @@ public class GUIDetails extends GUI implements GUIPrototype{
             GUICreate guiCreate = new GUICreate(api);
             guiCreate.connectToDatabase();
             guiCreate.initComponents(tableName);
+        }
+    }
+
+    private class handleReset implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //clean the table
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0);
+            //fill data
+
         }
     }
 }

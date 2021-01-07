@@ -23,11 +23,23 @@ public class Framework implements IFramework {
         return INSTANCE;
     }
 
+    /**
+     *
+     * @param _type: MYSQL, MSSQL, CSV
+     * @param _url
+     * @param _user
+     * @param _password
+     * @param _database
+     */
     @Override
     public void connect(String _type, String _url, String _user, String _password, String _database) {
         this.api = APIFactory.create(_type, _url,_user,_password, _database);
     }
 
+    /**
+     *
+     * @param _table: your table's name
+     */
     @Override
     public void form(String _table) {
         try{

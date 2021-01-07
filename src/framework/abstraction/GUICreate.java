@@ -15,6 +15,7 @@ public class GUICreate extends GUI implements GUIPrototype {
     protected JPanel panel;
     protected JLabel label;
     protected List<JTextField> listOfTextField;
+    protected List<JLabel> listOfLabelOfType;
     protected List<JLabel> listOfLabelsOfFields;
     protected JButton backButton;
     protected JButton createButton;
@@ -36,7 +37,7 @@ public class GUICreate extends GUI implements GUIPrototype {
         ArrayList<String> listOfColumns = getListOfColumnsName(_table);
         this.frame = new JFrame();
         this.frame.setTitle("Create a record");
-        this.panel = new JPanel(new GridLayout(listOfColumns.size()+2, 2));
+        this.panel = new JPanel(new GridLayout(listOfColumns.size()+2, 3));
         //this.label = new JLabel("Table: " + _table);
         this.backButton = new JButton("Back");
         this.backButton.addActionListener(new handleBack());
@@ -45,12 +46,15 @@ public class GUICreate extends GUI implements GUIPrototype {
 
         this.listOfTextField = new ArrayList<JTextField>();
         this.listOfLabelsOfFields = new ArrayList<JLabel>();
+        this.listOfLabelOfType = new ArrayList<JLabel>();
         for(int i = 0; i < listOfColumns.size(); i++){
             this.listOfTextField.add(new JTextField());
             this.listOfLabelsOfFields.add(new JLabel(listOfColumns.get(i)));
+            this.listOfLabelOfType.add(new JLabel(getColumnType(_table, listOfColumns.get(i))));
 
             this.panel.add(this.listOfLabelsOfFields.get(i));
             this.panel.add(this.listOfTextField.get(i));
+            this.panel.add(this.listOfLabelOfType.get(i));
         }
         this.panel.add(backButton);
         this.panel.add(createButton);
@@ -64,6 +68,10 @@ public class GUICreate extends GUI implements GUIPrototype {
     @Override
     protected ArrayList<String> getListOfColumnsName(String _table) {
         return api.getListOfColumns(_table);
+    }
+
+    protected String getColumnType(String _table, String _column){
+        return api.getColumnType(_table, _column);
     }
 
     @Override
@@ -81,14 +89,22 @@ public class GUICreate extends GUI implements GUIPrototype {
     private class handleCreate implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            StringBuilder values = new StringBuilder();
+//            StringBuilder values = new StringBuilder();
+//            for (int i = 0; i < listOfTextField.size(); i++){
+//                values.append("'" + listOfTextField.get(i).getText() + "'");
+//                if ( i != listOfTextField.size() - 1){
+//                    values.append(",");
+//                }
+//            }
+            ArrayList<String> values = new ArrayList<>();
             for (int i = 0; i < listOfTextField.size(); i++){
-                values.append("'" + listOfTextField.get(i).getText() + "'");
-                if ( i != listOfTextField.size() - 1){
-                    values.append(",");
-                }
+               values.add(listOfTextField.get(i).getText());
             }
-            api.insert(tableName, values.toString());
+            if (api.insert(tableName, values)){
+                JOptionPane.showMessageDialog(null, "Insert successful");
+            }else{
+                JOptionPane.showMessageDialog(null, "Insert unsuccessful");
+            }
         }
     }
 }

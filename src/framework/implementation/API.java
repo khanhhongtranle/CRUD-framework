@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public interface API {
     Connection connectToDatabase();
     ArrayList<String> getListOfColumns(String _table);
+    String getColumnType(String _table, String _column);
     ArrayList<Object[]> getListOfRows(String _table);
-    void insert(String _table, String values);
+    boolean insert(String _table, ArrayList<String> values);
 }

@@ -54,9 +54,19 @@ public class GUIDetails extends GUI implements GUIPrototype{
 //        columns.add("Update"); //column update button
 //        columns.add("Delete"); //column delete button
         String[] columnNames = columns.toArray(new String[0]);
-        Object[][] data = getListOfRows(_table).toArray(new Object[0][0]);
-        this.table = new JTable(data, columnNames);
+        this.table = new JTable();
         this.scrollPane = new JScrollPane(table);
+        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
+        for(int i = 0; i < columnNames.length; i++) {
+            defaultTableModel.addColumn(columnNames[i]);
+        }
+        defaultTableModel.setColumnIdentifiers(columnNames);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setModel(defaultTableModel);
+
+        Object[][] data = getListOfRows(_table).toArray(new Object[0][0]);
+        fillDataIntoTable(data);
+        //this.table = new JTable(data, columnNames);
 
         this.panel.add(tableNameLabel);
         this.panel.add(createButton);
@@ -81,6 +91,17 @@ public class GUIDetails extends GUI implements GUIPrototype{
         return api.getListOfRows(_table);
     }
 
+    private void fillDataIntoTable(Object[][] data){
+        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
+
+        for (int i = 0; i < data.length; i++) {
+            Object[] record = data[i];
+            defaultTableModel.addRow(record);
+        }
+        table.setModel(defaultTableModel);
+        scrollPane.setViewportView(table);
+    }
+
     private class handleCreate implements ActionListener{
 
         @Override
@@ -99,7 +120,8 @@ public class GUIDetails extends GUI implements GUIPrototype{
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0);
             //fill data
-
+            Object[][] data = getListOfRows(tableName).toArray(new Object[0][0]);
+            fillDataIntoTable(data);
         }
     }
 }

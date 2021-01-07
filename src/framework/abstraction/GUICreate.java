@@ -62,6 +62,7 @@ public class GUICreate extends GUI implements GUIPrototype {
         this.frame.add(panel);
         this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.frame.pack();
+        this.frame.setLocationRelativeTo(null); // this method display the JFrame to center position of a screen
         this.frame.setVisible(true);
     }
 
@@ -75,27 +76,22 @@ public class GUICreate extends GUI implements GUIPrototype {
     }
 
     @Override
-    public GUIPrototype clone() {
-        return null;
+    public GUIPrototype clone() throws CloneNotSupportedException {
+        GUIPrototype clone = (GUIPrototype) super.clone();
+        return this;
     }
 
     private class handleBack implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             //dispose this frame
+            frame.dispose();
         }
     }
 
     private class handleCreate implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-//            StringBuilder values = new StringBuilder();
-//            for (int i = 0; i < listOfTextField.size(); i++){
-//                values.append("'" + listOfTextField.get(i).getText() + "'");
-//                if ( i != listOfTextField.size() - 1){
-//                    values.append(",");
-//                }
-//            }
             ArrayList<String> values = new ArrayList<>();
             for (int i = 0; i < listOfTextField.size(); i++){
                values.add(listOfTextField.get(i).getText());

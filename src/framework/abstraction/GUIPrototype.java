@@ -1,5 +1,5 @@
 package framework.abstraction;
 
 public interface GUIPrototype {
-    GUIPrototype clone();
+    GUIPrototype clone() throws CloneNotSupportedException;
 }

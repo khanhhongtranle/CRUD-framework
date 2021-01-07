@@ -3,6 +3,8 @@ package framework.abstraction;
 import framework.implementation.API;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,8 @@ public class GUIDetails extends GUI implements GUIPrototype{
     protected JScrollPane scrollPane;
     protected String tableName;
 
+    private boolean isChanged = false;
+
     public GUIDetails(API _api) {
         super(_api);
     }
@@ -31,8 +35,9 @@ public class GUIDetails extends GUI implements GUIPrototype{
     }
 
     @Override
-    public GUIPrototype clone() {
-        return null;
+    public GUIPrototype clone() throws CloneNotSupportedException {
+        GUIPrototype clone = (GUIPrototype) super.clone();
+        return this;
     }
 
     public void initComponents(String _table){
@@ -46,6 +51,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
         this.createButton = new JButton("Create");
         this.createButton.addActionListener(new handleCreate());
         this.updateButton = new JButton("Update");
+        this.updateButton.addActionListener(new handleUpdate());
         this.deleteButton = new JButton("Delete");
         this.resetButton = new JButton("Reset");
         this.resetButton.addActionListener(new handleReset());
@@ -67,6 +73,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
         Object[][] data = getListOfRows(_table).toArray(new Object[0][0]);
         fillDataIntoTable(data);
         //this.table = new JTable(data, columnNames);
+        this.table.getModel().addTableModelListener(new handleTableModelChanged());
 
         this.panel.add(tableNameLabel);
         this.panel.add(createButton);
@@ -76,8 +83,9 @@ public class GUIDetails extends GUI implements GUIPrototype{
         this.panel.add(scrollPane);
 
         this.frame.setContentPane(panel);
-        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.pack();
+        this.frame.setLocationRelativeTo(null); // this method display the JFrame to center position of a screen
         this.frame.setVisible(true);
     }
 
@@ -122,6 +130,26 @@ public class GUIDetails extends GUI implements GUIPrototype{
             //fill data
             Object[][] data = getListOfRows(tableName).toArray(new Object[0][0]);
             fillDataIntoTable(data);
+        }
+    }
+
+    private class handleTableModelChanged implements TableModelListener{
+
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            if (e.getType() == TableModelEvent.UPDATE){
+                isChanged = true;
+            }
+        }
+    }
+
+    private class handleUpdate implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (isChanged){
+
+            }
         }
     }
 }

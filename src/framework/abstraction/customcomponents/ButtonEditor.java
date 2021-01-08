@@ -39,7 +39,10 @@ public class ButtonEditor extends DefaultCellEditor {
         lbl=(obj==null) ? "":obj.toString();
         btn.setText(lbl);
         clicked=true;
-        id = table.getModel().getValueAt(row, col);
+        //get PK col
+        String PK = controlAPI.getPrimaryKey(GUIDetails.tableName);
+        int PkColIndex = table.getColumnModel().getColumnIndex(PK);
+        id = table.getModel().getValueAt(row, PkColIndex);
         return btn;
     }
 

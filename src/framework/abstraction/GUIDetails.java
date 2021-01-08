@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -60,6 +61,13 @@ public class GUIDetails extends GUI implements GUIPrototype{
 
         Object[][] data = getListOfRows(_table).toArray(new Object[0][0]);
         fillDataIntoTable(data);
+        this.table.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                resetButton.setBackground(Color.RED);
+                resetButton.setOpaque(true);
+            }
+        });
 
         this.panel.add(tableNameLabel);
         this.panel.add(createButton);
@@ -105,6 +113,8 @@ public class GUIDetails extends GUI implements GUIPrototype{
             //fill data
             Object[][] data = getListOfRows(tableName).toArray(new Object[0][0]);
             fillDataIntoTable(data);
+
+            resetButton.setOpaque(false);
         }
     }
 

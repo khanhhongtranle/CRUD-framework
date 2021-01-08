@@ -71,6 +71,21 @@ public class MySQL implements API {
     }
 
     @Override
+    public String getPrimaryKey(String _table) {
+        String PK = null;
+        try {
+            Statement stmt = this.connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT k.column_name FROM information_schema.table_constraints t JOIN information_schema.key_column_usage k USING(constraint_name,table_schema,table_name) WHERE t.constraint_type='PRIMARY KEY' AND t.table_schema='"+ database +"' AND t.table_name='"+ _table +"'");
+            while (rs.next()) {
+                PK = rs.getString("column_name");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return PK;
+    }
+
+    @Override
     public ArrayList<Object[]> getListOfRows(String _table) {
         String query = "SELECT * FROM " + _table;
         String[] columnNames = getListOfColumns(_table).toArray(new String[0]);
@@ -156,37 +171,28 @@ public class MySQL implements API {
         return result;
     }
 
-//    @Override
-//    public void insert(String _table, String values) {
-//        Statement sm = null;
-//
-//
-//        try {
-//            sm = this.connection.createStatement();
-//            String[] columnNames = getListOfColumns(_table).toArray(new String[0]);
-//                    /*
-//                    INSERT INTO table_name (column1, column2, column3, ...)
-//                    VALUES (value1, value2, value3, ...);
-//                    */
-//            StringBuilder table_columns = new StringBuilder();
-//            for (int i = 0; i < columnNames.length; i++) {
-//                table_columns.append(columnNames[i]);
-//                if (i < columnNames.length - 1) table_columns.append(",");
-//            }
-//            String sql = "INSERT INTO " + _table + "(" + table_columns.toString() + ") " + "VALUES " + "(" + values + ")";
-//            System.out.println(sql);
-//            int n = sm.executeUpdate (sql);
-//            if (n >= 0){
-//                System.out.println("Success");
-//            }else{
-//                System.out.println("Error");
-//            }
-//            sm.close();
-//            //this.connection.close();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
+    /**
+     * delete a row where table.PK = id
+     * @param _table
+     * @param id
+     */
+    @Override
+    public boolean delete(String _table, Object id) {
+        boolean result = true;
+        try{
+            PreparedStatement st = connection.prepareStatement("DELETE FROM "+ _table +" WHERE " + getPrimaryKey(_table) +" = ?");
+            st.setObject(1,id);
+            st.executeUpdate();
+        }
+        catch (SQLException e){
+            result = false;
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        }
+        catch (Exception e){
+            result = false;
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }

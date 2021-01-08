@@ -8,5 +8,12 @@ public interface API {
     ArrayList<String> getListOfColumns(String _table);
     String getColumnType(String _table, String _column);
     ArrayList<Object[]> getListOfRows(String _table);
+    String getPrimaryKey(String _table);
     boolean insert(String _table, ArrayList<String> values);
+    /**
+     * delete a row where table.id = id
+     * @param _table
+     * @param id
+     */
+    boolean delete(String _table, Object id);
 }

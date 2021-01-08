@@ -1,5 +1,7 @@
 package framework.abstraction;
 
+import framework.abstraction.customcomponents.ButtonEditor;
+import framework.abstraction.customcomponents.ButtonRenderer;
 import framework.implementation.API;
 
 import javax.swing.*;
@@ -9,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GUIDetails extends GUI implements GUIPrototype{
 
@@ -16,14 +19,10 @@ public class GUIDetails extends GUI implements GUIPrototype{
     protected JPanel panel;
     protected JLabel tableNameLabel;
     protected JButton createButton;
-    protected JButton updateButton;
-    protected JButton deleteButton;
     protected JButton resetButton;
     protected JTable table;
     protected JScrollPane scrollPane;
-    protected String tableName;
-
-    private boolean isChanged = false;
+    public static String tableName;
 
     public GUIDetails(API _api) {
         super(_api);
@@ -41,7 +40,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
     }
 
     public void initComponents(String _table){
-        this.tableName = _table;
+        tableName = _table;
 
         this.frame = new JFrame("Detail");
         this.panel = new JPanel();
@@ -50,35 +49,20 @@ public class GUIDetails extends GUI implements GUIPrototype{
         this.tableNameLabel = new JLabel(_table);
         this.createButton = new JButton("Create");
         this.createButton.addActionListener(new handleCreate());
-        this.updateButton = new JButton("Update");
-        this.updateButton.addActionListener(new handleUpdate());
-        this.deleteButton = new JButton("Delete");
         this.resetButton = new JButton("Reset");
         this.resetButton.addActionListener(new handleReset());
 
         ArrayList<String> columns = getListOfColumnsName(_table);
-//        columns.add("Update"); //column update button
-//        columns.add("Delete"); //column delete button
+        columns.add("Update"); //column update button
+        columns.add("Delete"); //column delete button
         String[] columnNames = columns.toArray(new String[0]);
-        this.table = new JTable();
-        this.scrollPane = new JScrollPane(table);
-        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
-        for(int i = 0; i < columnNames.length; i++) {
-            defaultTableModel.addColumn(columnNames[i]);
-        }
-        defaultTableModel.setColumnIdentifiers(columnNames);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setModel(defaultTableModel);
+        setTableModel(columnNames);
 
         Object[][] data = getListOfRows(_table).toArray(new Object[0][0]);
         fillDataIntoTable(data);
-        //this.table = new JTable(data, columnNames);
-        this.table.getModel().addTableModelListener(new handleTableModelChanged());
 
         this.panel.add(tableNameLabel);
         this.panel.add(createButton);
-        this.panel.add(updateButton);
-        this.panel.add(deleteButton);
         this.panel.add(resetButton);
         this.panel.add(scrollPane);
 
@@ -99,16 +83,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
         return api.getListOfRows(_table);
     }
 
-    private void fillDataIntoTable(Object[][] data){
-        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
-
-        for (int i = 0; i < data.length; i++) {
-            Object[] record = data[i];
-            defaultTableModel.addRow(record);
-        }
-        table.setModel(defaultTableModel);
-        scrollPane.setViewportView(table);
-    }
+    //handle event click
 
     private class handleCreate implements ActionListener{
 
@@ -133,23 +108,51 @@ public class GUIDetails extends GUI implements GUIPrototype{
         }
     }
 
-    private class handleTableModelChanged implements TableModelListener{
+    //helper function
 
-        @Override
-        public void tableChanged(TableModelEvent e) {
-            if (e.getType() == TableModelEvent.UPDATE){
-                isChanged = true;
-            }
+    private void setTableModel(String[] columnNames){
+        this.table = new JTable();
+        this.scrollPane = new JScrollPane(table);
+        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
+        for(int i = 0; i < columnNames.length; i++) {
+            defaultTableModel.addColumn(columnNames[i]);
         }
+        defaultTableModel.setColumnIdentifiers(columnNames);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setModel(defaultTableModel);
     }
 
-    private class handleUpdate implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (isChanged){
-
-            }
+    private void fillDataIntoTable(Object[][] data){
+        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
+        int countOfColumns = 0;
+        for (int i = 0; i < data.length; i++) {
+            Object[] record = data[i];
+            countOfColumns = record.length;
+            //add 2 columns as update, delete button columns
+            record = appendValue(record, "update");
+            record = appendValue(record, "delete");
+            defaultTableModel.addRow(record);
         }
+        table.setModel(defaultTableModel);
+
+        //add button into table
+        table.getColumnModel().getColumn(countOfColumns).setCellRenderer(new ButtonRenderer());
+        table.getColumnModel().getColumn(countOfColumns).setCellEditor(new ButtonEditor(new JTextField(), api));
+        table.getColumnModel().getColumn(countOfColumns+1).setCellRenderer(new ButtonRenderer());
+        table.getColumnModel().getColumn(countOfColumns+1).setCellEditor(new ButtonEditor(new JTextField(), api));
+
+        scrollPane.setViewportView(table);
+    }
+
+    /**
+     * @by mkyong
+     * @param obj
+     * @param newObj
+     * @return
+     */
+    private Object[] appendValue(Object[] obj, Object newObj) {
+        ArrayList<Object> temp = new ArrayList<Object>(Arrays.asList(obj));
+        temp.add(newObj);
+        return temp.toArray();
     }
 }

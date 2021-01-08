@@ -25,7 +25,17 @@ public class MSSQL implements API {
     }
 
     @Override
+    public String getPrimaryKey(String _table) {
+        return null;
+    }
+
+    @Override
     public boolean insert(String _table, ArrayList<String> values) {
         return false;
+    }
+
+    @Override
+    public boolean delete(String _table, Object id) {
+        return true;
     }
 }

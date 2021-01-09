@@ -3,7 +3,9 @@
  */
 package framework.abstraction.customcomponents;
 
+import framework.abstraction.GUICreate;
 import framework.abstraction.GUIDetails;
+import framework.abstraction.GUIUpdate;
 import framework.implementation.API;
 
 import javax.swing.*;
@@ -52,6 +54,11 @@ public class ButtonEditor extends DefaultCellEditor {
         {
             switch (lbl){
                 case "update":
+                    GUIUpdate guiUpdate = new GUIUpdate(controlAPI);
+                    guiUpdate.connectToDatabase();
+                    guiUpdate.initComponents(GUIDetails.tableName, id);
+                    guiUpdate.setVisible();
+                    break;
                 case "delete":
                     boolean result = false;
                     result = controlAPI.delete(GUIDetails.tableName,id);

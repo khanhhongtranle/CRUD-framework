@@ -112,6 +112,31 @@ public class MySQL implements API {
     }
 
     @Override
+    public ArrayList<Object> getARecord(String _table, Object id) {
+        String PK = getPrimaryKey(_table);
+        String query = "SELECT * FROM " + _table + " WHERE " + PK + " = ?";
+        String[] columnNames = getListOfColumns(_table).toArray(new String[0]);
+
+        ArrayList<Object> aRecord = new ArrayList<>();
+        PreparedStatement st;
+        ResultSet rs;
+
+        try {
+            st = this.connection.prepareStatement(query);
+            st.setObject(1, id);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                for (int i = 0; i < columnNames.length; i++) {
+                    aRecord.add(rs.getString(columnNames[i]));
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return aRecord;
+    }
+
+    @Override
     public boolean insert(String _table, ArrayList<String> values) {
         boolean result = false;
         String[] columnNames = getListOfColumns(_table).toArray(new String[0]);
@@ -193,6 +218,15 @@ public class MySQL implements API {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public boolean update(String _table, Object _id, ArrayList<String> _values) {
+        //delete and insert
+        if (delete(_table, _id)){
+            return insert(_table,_values);
+        }
+        return false;
     }
 
 }

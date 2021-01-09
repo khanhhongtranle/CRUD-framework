@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class GUIDetails extends GUI implements GUIPrototype{
+public class GUIDetails extends GUI{
 
     protected JFrame frame;
     protected JPanel panel;
@@ -34,11 +34,6 @@ public class GUIDetails extends GUI implements GUIPrototype{
         api.connectToDatabase();
     }
 
-    @Override
-    public GUIPrototype clone() throws CloneNotSupportedException {
-        GUIPrototype clone = (GUIPrototype) super.clone();
-        return this;
-    }
 
     public void initComponents(String _table){
         tableName = _table;
@@ -78,6 +73,10 @@ public class GUIDetails extends GUI implements GUIPrototype{
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.pack();
         this.frame.setLocationRelativeTo(null); // this method display the JFrame to center position of a screen
+    }
+
+    @Override
+    public void setVisible() {
         this.frame.setVisible(true);
     }
 
@@ -100,6 +99,7 @@ public class GUIDetails extends GUI implements GUIPrototype{
             GUICreate guiCreate = new GUICreate(api);
             guiCreate.connectToDatabase();
             guiCreate.initComponents(tableName);
+            guiCreate.setVisible();
         }
     }
 

@@ -25,6 +25,11 @@ public class MSSQL implements API {
     }
 
     @Override
+    public ArrayList<Object> getARecord(String _table, Object id) {
+        return null;
+    }
+
+    @Override
     public String getPrimaryKey(String _table) {
         return null;
     }
@@ -37,5 +42,10 @@ public class MSSQL implements API {
     @Override
     public boolean delete(String _table, Object id) {
         return true;
+    }
+
+    @Override
+    public boolean update(String _table, Object id, ArrayList<String> values) {
+        return false;
     }
 }

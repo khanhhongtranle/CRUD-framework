@@ -9,11 +9,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GUICreate extends GUI implements GUIPrototype {
+public class GUICreate extends GUI  {
 
     protected JFrame frame;
     protected JPanel panel;
-    protected JLabel label;
     protected List<JTextField> listOfTextField;
     protected List<JLabel> listOfLabelOfType;
     protected List<JLabel> listOfLabelsOfFields;
@@ -26,7 +25,7 @@ public class GUICreate extends GUI implements GUIPrototype {
     }
 
     @Override
-    protected void connectToDatabase() {
+    public void connectToDatabase() {
         api.connectToDatabase();
     }
 
@@ -38,7 +37,6 @@ public class GUICreate extends GUI implements GUIPrototype {
         this.frame = new JFrame();
         this.frame.setTitle("Create a record");
         this.panel = new JPanel(new GridLayout(listOfColumns.size()+2, 3));
-        //this.label = new JLabel("Table: " + _table);
         this.backButton = new JButton("Back");
         this.backButton.addActionListener(new handleBack());
         this.createButton = new JButton("Create");
@@ -63,6 +61,10 @@ public class GUICreate extends GUI implements GUIPrototype {
         this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.frame.pack();
         this.frame.setLocationRelativeTo(null); // this method display the JFrame to center position of a screen
+    }
+
+    @Override
+    public void setVisible() {
         this.frame.setVisible(true);
     }
 
@@ -73,12 +75,6 @@ public class GUICreate extends GUI implements GUIPrototype {
 
     protected String getColumnType(String _table, String _column){
         return api.getColumnType(_table, _column);
-    }
-
-    @Override
-    public GUIPrototype clone() throws CloneNotSupportedException {
-        GUIPrototype clone = (GUIPrototype) super.clone();
-        return this;
     }
 
     private class handleBack implements ActionListener{

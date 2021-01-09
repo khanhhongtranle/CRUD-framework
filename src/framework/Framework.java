@@ -48,6 +48,7 @@ public class Framework implements IFramework {
                     GUIDetails guiDetails = new GUIDetails(api);
                     guiDetails.connectToDatabase();
                     guiDetails.initComponents(_table);
+                    guiDetails.setVisible();
                 }
             });
         }

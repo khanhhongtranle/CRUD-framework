@@ -11,8 +11,9 @@ public abstract class GUI {
         this.api = _api;
     }
 
-    protected abstract void connectToDatabase();
+    public abstract void connectToDatabase();
     public abstract void initComponents(String _table);
+    public abstract void setVisible();
     protected abstract ArrayList<String> getListOfColumnsName(String _table);
 //    protected abstract ArrayList<Object[]> getListOfRows(String _table);
 }

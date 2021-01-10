@@ -12,8 +12,12 @@ public abstract class APIFactory {
         API api = null;
         switch (_type){
             case "MYSQL":
-                MySQLCreator creator = new MySQLCreator();
-                api = creator.createImplementation(_url, _user, _password, _database);
+                MySQLCreator mySQLCreator = new MySQLCreator();
+                api = mySQLCreator.createImplementation(_url, _user, _password, _database);
+                break;
+            case "MSSQL":
+                MSSQLCreator mssqlCreator = new MSSQLCreator();
+                api = mssqlCreator.createImplementation(_url, _user, _password, _database);
                 break;
             default:
                 System.out.println("This database type is not supported.");

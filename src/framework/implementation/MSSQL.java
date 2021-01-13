@@ -166,4 +166,9 @@ public class MSSQL implements API {
     public void createMemberShipTable() {
 
     }
+
+    @Override
+    public boolean validateMembership(String _username, String _password) {
+        return false;
+    }
 }

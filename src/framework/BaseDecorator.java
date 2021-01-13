@@ -4,7 +4,7 @@ import framework.IFramework;
 import framework.implementation.API;
 
 public abstract class BaseDecorator implements IFramework {
-    private IFramework wrappee;
+    protected IFramework wrappee;
 
     public BaseDecorator(IFramework _wrappee){
         this.wrappee = _wrappee;

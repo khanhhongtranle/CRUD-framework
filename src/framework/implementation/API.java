@@ -2,6 +2,7 @@ package framework.implementation;
 
 import java.sql.Array;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface API {
@@ -20,4 +21,5 @@ public interface API {
     boolean delete(String _table, Object id);
     boolean update(String _table, Object id, ArrayList<String> values);
     void createMemberShipTable();
+    boolean validateMembership(String _username, String _password) throws SQLException;
 }

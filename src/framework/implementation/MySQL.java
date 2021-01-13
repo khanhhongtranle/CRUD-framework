@@ -243,7 +243,7 @@ public class MySQL implements API {
 
             stmt.executeUpdate(CREATE_TABLE_SQL);
 
-            System.out.println("Table created");
+            System.out.println("membership_users table created");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -257,6 +257,32 @@ public class MySQL implements API {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean validateMembership(String _username, String _password) throws SQLException {
+        boolean result = false;
+        PreparedStatement st = null;
+        ResultSet rs;
+        String query = "SELECT * FROM membership_users  WHERE username = ? and password = ?";
+        try {
+            st = this.connection.prepareStatement(query);
+            st.setString(1, _username);
+            st.setString(2, _password);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                result = true;
+            }
+            rs.close();
+        } catch (Exception se) {
+            se.printStackTrace();
+        }
+        finally {
+            if (st!=null){
+                st.close();
+            }
+        }
+        return result;
     }
 
 }

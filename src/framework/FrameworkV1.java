@@ -1,20 +1,23 @@
 package framework;
 
+import framework.abstraction.GUIDetails;
 import framework.factory.APIFactory;
 import framework.implementation.API;
 
-public class FrameworkV1 extends BaseDecorator{
-    private  IFramework wrappee = null;
+import java.awt.*;
+import java.sql.SQLException;
+
+public class FrameworkV1 extends BaseDecorator {
     private API api = null;
 
     public FrameworkV1(IFramework _wrappee) {
         super(_wrappee);
-        wrappee = _wrappee;
     }
 
     @Override
     public void connect(String _type, String _url, String _user, String _password, String _database) {
-        this.api = APIFactory.create(_type, _url,_user,_password, _database);
+        super.connect(_type,_url, _user, _password, _database);
+        this.api = APIFactory.create(_type, _url, _user, _password, _database);
     }
 
     /*
@@ -24,21 +27,22 @@ public class FrameworkV1 extends BaseDecorator{
      * - Authenticating users who visit your site
      */
 
-    public void createMembership(){
-        try{
+    public void createMembership() {
+        try {
             api.connectToDatabase();
             api.createMemberShipTable();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public void createMember(){
-
-    }
-
-    public boolean validateMember(){
-        return true;
+    public boolean validateMember(String _username, String _password) {
+        try{
+            return api.validateMembership(_username, _password);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

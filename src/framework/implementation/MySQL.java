@@ -75,7 +75,7 @@ public class MySQL implements API {
         String PK = null;
         try {
             Statement stmt = this.connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT k.column_name FROM information_schema.table_constraints t JOIN information_schema.key_column_usage k USING(constraint_name,table_schema,table_name) WHERE t.constraint_type='PRIMARY KEY' AND t.table_schema='"+ database +"' AND t.table_name='"+ _table +"'");
+            ResultSet rs = stmt.executeQuery("SELECT k.column_name FROM information_schema.table_constraints t JOIN information_schema.key_column_usage k USING(constraint_name,table_schema,table_name) WHERE t.constraint_type='PRIMARY KEY' AND t.table_schema='" + database + "' AND t.table_name='" + _table + "'");
             while (rs.next()) {
                 PK = rs.getString("column_name");
             }
@@ -153,37 +153,37 @@ public class MySQL implements API {
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + _table + "(" + table_columns.toString() + ") " + "VALUES " + "(" + param_values.toString() + ")");
 
-            for (int index = 0; index < columnNames.length; index++){
+            for (int index = 0; index < columnNames.length; index++) {
                 String columnType = getColumnType(_table, columnNames[index]);
 
-                switch (columnType.toUpperCase()){
+                switch (columnType.toUpperCase()) {
                     case "CHAR":
                     case "VARCHAR":
                     case "TEXT":
-                        preparedStatement.setString(index+1, values.get(index));
+                        preparedStatement.setString(index + 1, values.get(index));
                         break;
                     case "INT":
-                        preparedStatement.setInt(index+1, Integer.parseInt(values.get(index)));
+                        preparedStatement.setInt(index + 1, Integer.parseInt(values.get(index)));
                         break;
                     case "DOUBLE":
-                        preparedStatement.setDouble(index+1, Double.parseDouble(values.get(index)));
+                        preparedStatement.setDouble(index + 1, Double.parseDouble(values.get(index)));
                         break;
                     case "FLOAT":
-                        preparedStatement.setFloat(index+1, Float.parseFloat(values.get(index)));
+                        preparedStatement.setFloat(index + 1, Float.parseFloat(values.get(index)));
                         break;
                     case "DATE":
                     case "TIME":
                     case "DATETIME":
                     case "TIMESTAMP":
-                        preparedStatement.setDate(index+1, Date.valueOf(values.get(index)));
+                        preparedStatement.setDate(index + 1, Date.valueOf(values.get(index)));
                     default:
-                        preparedStatement.setString(index+1, values.get(index));
+                        preparedStatement.setString(index + 1, values.get(index));
                 }
             }
             int row = preparedStatement.executeUpdate();
             // rows affected
             System.out.println(row); //1
-            if (row == 1){
+            if (row == 1) {
                 result = true;
             }
         } catch (SQLException e) {
@@ -198,22 +198,21 @@ public class MySQL implements API {
 
     /**
      * delete a row where table.PK = id
+     *
      * @param _table
      * @param id
      */
     @Override
     public boolean delete(String _table, Object id) {
         boolean result = true;
-        try{
-            PreparedStatement st = connection.prepareStatement("DELETE FROM "+ _table +" WHERE " + getPrimaryKey(_table) +" = ?");
-            st.setObject(1,id);
+        try {
+            PreparedStatement st = connection.prepareStatement("DELETE FROM " + _table + " WHERE " + getPrimaryKey(_table) + " = ?");
+            st.setObject(1, id);
             st.executeUpdate();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             result = false;
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             result = false;
             e.printStackTrace();
         }
@@ -223,10 +222,41 @@ public class MySQL implements API {
     @Override
     public boolean update(String _table, Object _id, ArrayList<String> _values) {
         //delete and insert
-        if (delete(_table, _id)){
-            return insert(_table,_values);
+        if (delete(_table, _id)) {
+            return insert(_table, _values);
         }
         return false;
+    }
+
+    @Override
+    public void createMemberShipTable() {
+        String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS  membership_users ("
+                + "ID INT NOT NULL,"
+                + "USERNAME VARCHAR(45) NOT NULL,"
+                + "PASSWORD VARCHAR(45) NOT NULL,"
+                + "EMAIL VARCHAR(45),"
+                + "PRIMARY KEY (ID))";
+        Statement stmt = null;
+
+        try {
+            stmt = this.connection.createStatement();
+
+            stmt.executeUpdate(CREATE_TABLE_SQL);
+
+            System.out.println("Table created");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Close connection
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

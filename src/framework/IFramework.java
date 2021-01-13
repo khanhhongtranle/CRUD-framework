@@ -1,8 +1,6 @@
 package framework;
 
 public interface IFramework {
-    //void membership();
-
     /**
      * connect to database
      * @param _type
@@ -18,8 +16,4 @@ public interface IFramework {
      * @param _table
      */
     void form(String _table);
-
-    //void create();
-
-    //void edit();
 }

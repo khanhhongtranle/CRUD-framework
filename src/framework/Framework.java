@@ -25,7 +25,7 @@ public class Framework implements IFramework {
 
     /**
      *
-     * @param _type: MYSQL, MSSQL, CSV
+     * @param _type: MYSQL, MSSQL
      * @param _url
      * @param _user
      * @param _password

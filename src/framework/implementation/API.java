@@ -19,4 +19,5 @@ public interface API {
      */
     boolean delete(String _table, Object id);
     boolean update(String _table, Object id, ArrayList<String> values);
+    void createMemberShipTable();
 }

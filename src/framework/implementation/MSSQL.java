@@ -161,4 +161,9 @@ public class MSSQL implements API {
     public boolean update(String _table, Object id, ArrayList<String> values) {
         return false;
     }
+
+    @Override
+    public void createMemberShipTable() {
+
+    }
 }

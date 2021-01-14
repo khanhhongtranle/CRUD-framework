@@ -6,7 +6,7 @@ public class ProxyFramework implements IFramework{
         MSSQL
     }
 
-    private Framework realFramework = null;
+    private IFramework realFramework = null;
 
     @Override
     public void connect(DatabaseType _type, String _url, String _user, String _password, String _database) {

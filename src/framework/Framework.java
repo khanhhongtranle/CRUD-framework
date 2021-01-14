@@ -11,17 +11,17 @@ import java.awt.*;
  */
 public class Framework implements IFramework {
 
-    private static final Framework INSTANCE = new Framework();
+    //private static final Framework INSTANCE = new Framework();
 
     private API api = null;
 
-    private Framework(){
+    public Framework(){
 
     }
 
-    public static Framework getInstance(){
-        return INSTANCE;
-    }
+//    public static Framework getInstance(){
+//        return INSTANCE;
+//    }
 
     /**
      *

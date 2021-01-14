@@ -1,10 +1,15 @@
 package framework;
 
 public class ProxyFramework implements IFramework{
+    public enum DatabaseType{
+        MySQL,
+        MSSQL
+    }
+
     private Framework realFramework = null;
 
     @Override
-    public void connect(String _type, String _url, String _user, String _password, String _database) {
+    public void connect(DatabaseType _type, String _url, String _user, String _password, String _database) {
         if (this.realFramework == null){
             this.realFramework = new Framework();
         }

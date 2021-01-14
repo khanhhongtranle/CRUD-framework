@@ -9,7 +9,7 @@ public interface IFramework {
      * @param _password
      * @param _database
      */
-    void connect(String _type, String _url, String _user, String _password, String _database);
+    void connect(ProxyFramework.DatabaseType _type, String _url, String _user, String _password, String _database);
 
     /**
      * show form of the table typed

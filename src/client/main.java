@@ -33,11 +33,11 @@ public class main {
         framework with virtual proxy pattern
          */
         ProxyFramework proxyFramework = new ProxyFramework();
-        proxyFramework.connect("MYSQL", "localhost:3306", "root", "123456", "funretro");
+        proxyFramework.connect(ProxyFramework.DatabaseType.MySQL, "localhost:3306", "root", "123456", "funretro");
         proxyFramework.form("boards");
 
         FrameworkV1 frameworkV1 = new FrameworkV1(proxyFramework);
-        frameworkV1.connect("MYSQL", "localhost:3306", "root", "123456", "funretro");
+        frameworkV1.connect(ProxyFramework.DatabaseType.MySQL, "localhost:3306", "root", "123456", "funretro");
         frameworkV1.createMembership();
         frameworkV1.form("membership_users");
     }

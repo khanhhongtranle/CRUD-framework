@@ -32,7 +32,7 @@ public class Framework implements IFramework {
      * @param _database
      */
     @Override
-    public void connect(String _type, String _url, String _user, String _password, String _database) {
+    public void connect(ProxyFramework.DatabaseType _type, String _url, String _user, String _password, String _database) {
         this.api = APIFactory.create(_type, _url,_user,_password, _database);
     }
 

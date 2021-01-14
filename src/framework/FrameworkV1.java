@@ -6,6 +6,12 @@ import framework.implementation.API;
 
 import java.awt.*;
 import java.sql.SQLException;
+/*
+ * membership features:
+ * - create membership table
+ * - create new user and password
+ * - Authenticating users who visit your site
+ */
 
 public class FrameworkV1 extends BaseDecorator {
     private API api = null;
@@ -15,18 +21,15 @@ public class FrameworkV1 extends BaseDecorator {
     }
 
     @Override
-    public void connect(String _type, String _url, String _user, String _password, String _database) {
+    public void connect(ProxyFramework.DatabaseType _type, String _url, String _user, String _password, String _database) {
         super.connect(_type,_url, _user, _password, _database);
         this.api = APIFactory.create(_type, _url, _user, _password, _database);
     }
 
-    /*
-     * membership features:
-     * - create membership table
-     * - create new user and password
-     * - Authenticating users who visit your site
-     */
 
+    /**
+     * create if not exists membership_users table in your database
+     */
     public void createMembership() {
         try {
             api.connectToDatabase();
@@ -36,6 +39,12 @@ public class FrameworkV1 extends BaseDecorator {
         }
     }
 
+    /**
+     * Authenticating user
+     * @param _username
+     * @param _password
+     * @return
+     */
     public boolean validateMember(String _username, String _password) {
         try{
             return api.validateMembership(_username, _password);

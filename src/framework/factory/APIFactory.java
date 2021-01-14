@@ -1,5 +1,6 @@
 package framework.factory;
 
+import framework.ProxyFramework;
 import framework.implementation.API;
 
 public abstract class APIFactory {
@@ -8,14 +9,14 @@ public abstract class APIFactory {
 
     }
 
-    public static API create(String _type, String _url, String _user, String _password, String _database){
+    public static API create(ProxyFramework.DatabaseType _type, String _url, String _user, String _password, String _database){
         API api = null;
         switch (_type){
-            case "MYSQL":
+            case MySQL:
                 MySQLCreator mySQLCreator = new MySQLCreator();
                 api = mySQLCreator.createImplementation(_url, _user, _password, _database);
                 break;
-            case "MSSQL":
+            case MSSQL:
                 MSSQLCreator mssqlCreator = new MSSQLCreator();
                 api = mssqlCreator.createImplementation(_url, _user, _password, _database);
                 break;

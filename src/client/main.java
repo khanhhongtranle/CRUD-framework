@@ -28,10 +28,11 @@ public class main {
         DIContainer container = DIContainer.getInstance();
         container.setModule(IFramework.class, Framework.class);
 
-        App app = new App(new Framework());
+        App app = container.getModule(App.class);
 
-        app.Connect(ProxyFramework.DatabaseType.MSSQL, "localhost:1433", "phuc", "87435", "temp");
-        app.Form("BOOK");
+
+        app.Connect(ProxyFramework.DatabaseType.MSSQL, "localhost:1433", "phuc", "87435", "AdventureWorksDW2012");
+        app.Form("FactFinance");
 
 
     }

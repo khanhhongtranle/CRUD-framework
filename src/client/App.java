@@ -6,7 +6,7 @@ import framework.ProxyFramework;
 public class App {
     IFramework framework;
 
-    App(IFramework _framework){
+    public App(IFramework _framework){
         this.framework = _framework;
     }
 
